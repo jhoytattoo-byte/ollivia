@@ -5,11 +5,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ROTA PRINCIPAL DA IA
-app.post('/api/ia', async (req, res) => {
-    try {
-        const { prompt } = req.body;
+// Saudações amigáveis
+const saudacoes = ['oi', 'ola', 'olá', 'oi tudo bem', 'tudo bem', 'oie', 'opa'];
 
+app.post('/api/ia', async (req, res) => {
+    const { prompt } = req.body;
+    
+    // Resposta para saudações
+    if (saudacoes.includes(prompt.toLowerCase().trim())) {
+        return res.json({ 
+            success: true, 
+            resposta: "Oi! Como vão as coisas por aí? Tem algo em que eu possa te ajudar hoje?"
+        });
+    }
+    
+    try {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -22,21 +32,20 @@ app.post('/api/ia', async (req, res) => {
                 temperature: 0.7
             })
         });
-
+        
         const data = await response.json();
         const resposta = data.choices[0].message.content;
-
+        
         res.json({ success: true, resposta });
-
+        
     } catch (error) {
         console.error('Erro:', error);
         res.status(500).json({ success: false, erro: error.message });
     }
 });
 
-// ROTA DE TESTE
 app.get('/api/ia', (req, res) => {
-    res.json({ success: true, message: 'API OllivIA está rodando!' });
+    res.json({ success: true, message: 'API OllivIA rodando' });
 });
 
 const PORT = process.env.PORT || 3000;
