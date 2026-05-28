@@ -1,8 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-
-dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -37,7 +34,7 @@ app.post('/api/ia', async (req, res) => {
     }
 });
 
-// ROTA DE TESTE (opcional)
+// ROTA DE TESTE
 app.get('/api/ia', (req, res) => {
     res.json({ success: true, message: 'API OllivIA está rodando!' });
 });
